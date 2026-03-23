@@ -1066,7 +1066,7 @@ const products = {
   p3:{ name:'Ovos Premium — 100g Unidade', price:38, qty:1 },
   p4:{ name:'Ovos Premium — 250g Unidade', price:80, qty:1 },
 };
-const selected = {};
+const selected = [];
 function getProductConfig(id){
   return {
     flavor1: document.getElementById('flavor-'+id+'-1')?.value || '',
@@ -1104,85 +1104,82 @@ let currentStep = 1;
 function fmtMoney(v){ return 'R$'+v.toFixed(2).replace('.',','); }
 
 function toggleCard(id, price){
-  const card = document.getElementById('card-'+id);
   const extras = document.getElementById('extras-'+id);
 
-  const key = id;
+  // pega dados escolhidos
+  const flavor1 = document.getElementById('flavor-'+id+'-1')?.value || '';
+  const flavor2 = document.getElementById('flavor-'+id+'-2')?.value || '';
+  const casca   = document.getElementById('casca-'+id)?.value || '';
 
-  if(card.classList.contains('selected')){
-    // DESMARCAR
-    card.classList.remove('selected');
-    extras.style.display = 'none';
-    delete selected[key];
-    
-    // RESETAR SELECTS
-    document.querySelectorAll(`#extras-${id} select`).forEach(s => s.selectedIndex = 0);
-  } else {
-    // MARCAR
-    card.classList.add('selected');
-    extras.style.display = 'block';
+  // valida
+  if(!flavor1 || !casca){
+    alert('⚠️ Selecione sabor e casca antes de adicionar.');
+    return;
+  }
 
-    if(!selected[key]){
-      selected[key] = {
-        id: id,
-        ...products[id],
-        qty: 1
-      };
-    }
+  // adiciona novo item (permite repetidos diferentes)
+  selected.push({
+    uniqueId: Date.now() + Math.random(),
+    id: id,
+    name: products[id].name,
+    price: price,
+    qty: 1,
+    flavor1,
+    flavor2,
+    casca
+  });
+
+  // mantém visual aberto
+  extras.style.display = 'block';
+
+  updateCart();
+  renderCart();
+}
+
+function removeItem(uniqueId){
+  const index = selected.findIndex(i => i.uniqueId == uniqueId);
+  if(index > -1){
+    selected.splice(index, 1);
   }
 
   updateCart();
   renderCart();
 }
 
-function removeItem(id){
-  delete selected[id];
+function changeQty(uniqueId, delta){
+  const item = selected.find(i => i.uniqueId == uniqueId);
+  if(!item) return;
 
-  const card = document.getElementById('card-' + id);
-  const extras = document.getElementById('extras-' + id);
-
-  if(card){
-    card.classList.remove('selected');
-  }
-
-  if(extras){
-    extras.style.display = 'none';
-  }
-
-  updateCart();
-  renderCart();
-}
-
-function changeQty(key, delta){
-  if(!selected[key]) return;
-
-  selected[key].qty = Math.max(1, (selected[key].qty||1)+delta);
-
-  // ✅ ATUALIZA O NÚMERO NA TELA
-  document.getElementById('qty-' + key).textContent = selected[key].qty;
+  item.qty = Math.max(1, item.qty + delta);
 
   updateCart();
   renderCart();
 }
 
 function updateCart(){
-  const keys = Object.keys(selected);
   let total = 0;
-  keys.forEach(k => { total += selected[k].price * (selected[k].qty||1); });
+  let totalItens = 0;
+
+  selected.forEach(item => {
+    total += item.price * item.qty;
+    totalItens += item.qty;
+  });
+
   const bar = document.getElementById('cartBar');
-  if(keys.length > 0){
-    bar.style.display='flex';
-    let totalItens = 0;
-    keys.forEach(k => totalItens += selected[k].qty);
+
+  if(selected.length > 0){
+    bar.style.display = 'flex';
     document.getElementById('cart-items-label').textContent = totalItens + ' item(s)';
     document.getElementById('cart-total-label').textContent = fmtMoney(total);
   } else {
-    bar.style.display='none';
+    bar.style.display = 'none';
   }
 }
 
 function getTotal(){
-  return Object.keys(selected).reduce((s,k)=>s+selected[k].price*(selected[k].qty||1),0);
+  return selected.reduce((total, item) => {
+    return total + (item.price * item.qty);
+  }, 0);
 }
 
 function selectDay(d){
@@ -1466,34 +1463,31 @@ function renderCart(){
 
   let total = 0;
 
-  Object.keys(selected).forEach(k => {
-    const p = selected[k];
-    const qty = p.qty || 1;
-    const subtotal = p.price * qty;
-
+  selected.forEach(item => {
+    const subtotal = item.price * item.qty;
     total += subtotal;
 
     list.innerHTML += `
       <div style="border-bottom:1px solid #eee; padding:10px 0;">
         
-        <div style="font-weight:600;">${p.name}</div>
+        <div style="font-weight:600;">${item.name}</div>
 
         <div style="font-size:0.8rem; color:#666;">
-          ${getFlavorText(p.id)}
+          ${item.flavor1}${item.flavor2 ? ' / ' + item.flavor2 : ''} | Casca: ${item.casca}
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
           
           <div>
-            <button onclick="changeQty('${p.id}', -1)">−</button>
-            <span style="margin:0 8px;">${qty}</span>
-            <button onclick="changeQty('${p.id}', 1)">+</button>
+            <button onclick="changeQty('${item.uniqueId}', -1)">−</button>
+            <span style="margin:0 8px;">${item.qty}</span>
+            <button onclick="changeQty('${item.uniqueId}', 1)">+</button>
           </div>
 
           <div>${fmtMoney(subtotal)}</div>
         </div>
 
-        <button onclick="removeItem('${p.id}')" style="
+        <button onclick="removeItem('${item.uniqueId}')" style="
           margin-top:5px;
           background:#ff5252;
           color:white;
@@ -1510,6 +1504,7 @@ function renderCart(){
 
   document.getElementById('cart-total-modal').textContent = fmtMoney(total);
 }
+  
 function getFlavorText(id){
   const f1 = document.getElementById('flavor-'+id+'-1')?.value || '';
   const f2 = document.getElementById('flavor-'+id+'-2')?.value || '';
