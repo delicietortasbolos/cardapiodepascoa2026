@@ -503,27 +503,19 @@
   }
 
    #btn-copiar-pix {
-     background: #d4af37;
-     border: none;
-     padding: 10px 15px;
-     border-radius: 8px;
-     cursor: pointer;
-     font-weight: bold;
+    background: #d4af37;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
   }
 
    #btn-copiar-pix:hover {
     background: #c49b2c;
     color: var(--cream-light);
-    border: none;
-    border-radius: 8px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 0.5rem;
+    transform: scale(1.05);
   }
   .btn-primary:hover { background: var(--brown-warm); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -644,7 +636,7 @@
       <h2>Escolha seus Ovos 🍫</h2>
       <p>Selecione os itens e <strong style="color:#d32f2f;">não esqueça de escolher os sabores e casca!</strong></p>
     </div>
-    <div class="error-msg" id="step1-error" style="margin:0 0 1rem 0;padding:0.8rem;background:#ffebee;border-left:4px solid #d32f2f;border-radius:4px;font-size:0.9rem;"></div>
+    <div class="error-msg" id="step1-error" style="display:none;margin:0 0 1rem 0;padding:0.8rem;background:#ffebee;border-left:4px solid #d32f2f;border-radius:4px;font-size:0.9rem;"></div>
 
     <!-- TRADICIONAIS -->
     <div class="products-group">
@@ -689,11 +681,11 @@
         <div class="card-body">
           <div class="card-name">50g Unidade</div>
           <div id="extras-t2" style="display:none">
-            <select class="flavor-select" id="flavor-t2-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-t2-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione o Sabor —</option>
               <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
             </select>
-            <select class="flavor-select" id="casca-t2" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-t2" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -712,11 +704,11 @@
         <div class="card-body">
           <div class="card-name">100g Unidade</div>
           <div id="extras-t3" style="display:none">
-            <select class="flavor-select" id="flavor-t3-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-t3-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione o Sabor —</option>
               <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
             </select>
-            <select class="flavor-select" id="casca-t3" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-t3" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -735,11 +727,11 @@
         <div class="card-body">
           <div class="card-name">250g Unidade</div>
           <div id="extras-t4" style="display:none">
-            <select class="flavor-select" id="flavor-t4-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-t4-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione o Sabor —</option>
               <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
             </select>
-            <select class="flavor-select" id="casca-t4" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-t4" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -769,15 +761,15 @@
           <div class="card-name">50g Kit com 2</div>
           <div class="card-desc">Dois mini ovos premium</div>
           <div id="extras-p1" style="display:none">
-            <select class="flavor-select" id="flavor-p1-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-p1-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione Sabor 1 —</option>
               <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
             </select>
-            <select class="flavor-select" id="flavor-p1-2" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-p1-2" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione Sabor 2 —</option>
               <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
             </select>
-            <select class="flavor-select" id="casca-p1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-p1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -796,11 +788,11 @@
         <div class="card-body">
           <div class="card-name">50g Unidade</div>
           <div id="extras-p2" style="display:none">
-            <select class="flavor-select" id="flavor-p2-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-p2-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione o Sabor —</option>
               <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
             </select>
-            <select class="flavor-select" id="casca-p2" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-p2" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -819,11 +811,11 @@
         <div class="card-body">
           <div class="card-name">100g Unidade</div>
           <div id="extras-p3" style="display:none">
-            <select class="flavor-select" id="flavor-p3-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-p3-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione o Sabor —</option>
               <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
             </select>
-            <select class="flavor-select" id="casca-p3" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-p3" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -837,16 +829,16 @@
         <div class="card-price">R$38</div>
       </div>
 
-      <div class="product-card" id="card-p4" onclick="toggleCard('p4',90)">
+      <div class="product-card" id="card-p4" onclick="toggleCard('p4',80)">
         <div class="card-check" id="check-p4">✓</div>
         <div class="card-body">
           <div class="card-name">250g Unidade</div>
           <div id="extras-p4" style="display:none">
-            <select class="flavor-select" id="flavor-p4-1" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="flavor-p4-1" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione o Sabor —</option>
               <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
             </select>
-            <select class="flavor-select" id="casca-p4" onclick="event.stopPropagation()">
+            <select class="flavor-select" id="casca-p4" onclick="event.stopPropagation()" required>
               <option value="" disabled selected>— Selecione a Casca —</option>
               <option>Chocolate Branco</option><option>Meio Amargo</option>
             </select>
@@ -861,7 +853,6 @@
       </div>
     </div>
 
-    <div id="step1-error" class="error-msg" style="text-align:center"></div>
     <button class="btn-primary" onclick="goStep(2)">Continuar →</button>
   </div>
 
@@ -1048,7 +1039,13 @@ const products = {
   p4:{ name:'Ovos Premium — 250g Unidade', price:80, qty:1 },
 };
 const selected = {};
-  
+function getProductConfig(id){
+  return {
+    flavor1: document.getElementById('flavor-'+id+'-1')?.value || '',
+    flavor2: document.getElementById('flavor-'+id+'-2')?.value || '',
+    casca: document.getElementById('casca-'+id)?.value || ''
+  };
+}
 function copiarPix() {
 
   const texto = document.getElementById("pix-chave").innerText;
@@ -1087,22 +1084,32 @@ function fmtMoney(v){ return 'R$'+v.toFixed(2).replace('.',','); }
 function toggleCard(id, price){
   const card = document.getElementById('card-'+id);
   const extras = document.getElementById('extras-'+id);
-  if(selected[id]){
-    delete selected[id];
+
+  const key = id;
+
+  if(card.classList.contains('selected')){
+    // DESMARCAR
     card.classList.remove('selected');
-    extras.style.display='none';
+    extras.style.display = 'none';
+    delete selected[key];
   } else {
-    selected[id] = { ...products[id] };
+    // MARCAR
     card.classList.add('selected');
-    extras.style.display='block';
+    extras.style.display = 'block';
+
+    selected[key] = {
+      id: id,
+      ...products[id],
+      qty: 1
+    };
   }
+
   updateCart();
 }
 
-function changeQty(id, delta){
-  if(!selected[id]) return;
-  selected[id].qty = Math.max(1, (selected[id].qty||1)+delta);
-  document.getElementById('qty-'+id).textContent = selected[id].qty;
+function changeQty(key, delta){
+  if(!selected[key]) return;
+  selected[key].qty = Math.max(1, (selected[key].qty||1)+delta);
   updateCart();
 }
 
@@ -1113,7 +1120,9 @@ function updateCart(){
   const bar = document.getElementById('cartBar');
   if(keys.length > 0){
     bar.style.display='flex';
-    document.getElementById('cart-items-label').textContent = keys.length+' item(s) selecionado(s)';
+    let totalItens = 0;
+    keys.forEach(k => totalItens += selected[k].qty);
+    document.getElementById('cart-items-label').textContent = totalItens + ' item(s)';
     document.getElementById('cart-total-label').textContent = fmtMoney(total);
   } else {
     bar.style.display='none';
@@ -1161,9 +1170,11 @@ function goStep(n){
     let errorMsg = '';
     
     Object.keys(selected).forEach(k => {
-      const flavor1 = document.getElementById('flavor-'+k+'-1');
-      const flavor2 = document.getElementById('flavor-'+k+'-2');
-      const casca = document.getElementById('casca-'+k);
+      const id = selected[k].id;
+      
+      const flavor1 = document.getElementById('flavor-'+id+'-1');
+      const flavor2 = document.getElementById('flavor-'+id+'-2');
+      const casca   = document.getElementById('casca-'+id);
       
       if(flavor1 && flavor1.value === ''){
         allFlavorsSelected = false;
@@ -1243,12 +1254,14 @@ function buildSummary(){
     const qty=p.qty||1;
     const subtotal=p.price*qty;
     // get flavor info
-    let fl='';
-    if(document.getElementById('flavor-'+k+'-1')){
-      const f1=document.getElementById('flavor-'+k+'-1').value;
-      const f2el=document.getElementById('flavor-'+k+'-2');
-      const f2=f2el?f2el.value:'';
-      const ca=document.getElementById('casca-'+k)?document.getElementById('casca-'+k).value:'';
+    let fl = '';
+    const id = selected[k].id;
+    if(document.getElementById('flavor-'+id+'-1')){
+      const f1 = document.getElementById('flavor-'+id+'-1').value;
+      const f2el = document.getElementById('flavor-'+id+'-2');
+      const f2 = f2el ? f2el.value : '';
+      const ca = document.getElementById('casca-'+id) ? document.getElementById('casca-'+id).value : '';
+      
       if(f1) fl+='Sabor: '+f1;
       if(f2) fl+=' / '+f2;
       if(ca) fl+=' | Casca: '+ca;
@@ -1282,9 +1295,11 @@ function finalizarPedido(){
   // VALIDAÇÃO FINAL: Verificar novamente se todos os campos estão preenchidos
   let allValid = true;
   Object.keys(selected).forEach(k => {
-    const flavor1 = document.getElementById('flavor-'+k+'-1');
-    const flavor2 = document.getElementById('flavor-'+k+'-2');
-    const casca = document.getElementById('casca-'+k);
+    const id = selected[k].id;
+
+    const flavor1 = document.getElementById('flavor-'+id+'-1');
+    const flavor2 = document.getElementById('flavor-'+id+'-2');
+    const casca   = document.getElementById('casca-'+id);
     
     if((flavor1 && flavor1.value === '') || (casca && casca.value === '')){
       allValid = false;
@@ -1315,13 +1330,14 @@ function finalizarPedido(){
 
   Object.keys(selected).forEach(function(k) {
     const p = selected[k];
+    const id = selected[k].id;
     const qty = p.qty||1;
     let fl = '';
-    if(document.getElementById('flavor-'+k+'-1')){
-      const f1 = document.getElementById('flavor-'+k+'-1').value;
-      const f2el = document.getElementById('flavor-'+k+'-2');
+   if(document.getElementById('flavor-'+id+'-1')){
+      const f1 = document.getElementById('flavor-'+id+'-1').value;
+      const f2el = document.getElementById('flavor-'+id+'-2');
       const f2 = f2el ? f2el.value : '';
-      const ca = document.getElementById('casca-'+k) ? document.getElementById('casca-'+k).value : '';
+      const ca = document.getElementById('casca-'+id) ? document.getElementById('casca-'+id).value : '';
       if(f1) fl += f1;
       if(f2) fl += ' / '+f2;
       if(ca) fl += ' | Casca: '+ca;
