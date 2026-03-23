@@ -652,7 +652,7 @@
       </div>
       <div style="height:0.6rem"></div>
 
-      <div class="product-card" id="card-t1" onclick="handleCardClick(event, 't1',25)"
+      <div class="product-card" id="card-t1" onclick="handleCardClick(event, 't1',25)">
         <div class="card-check" id="check-t1">✓</div>
         <div class="card-body">
           <div class="card-name">50g Kit com 2</div>
@@ -1126,7 +1126,8 @@ function toggleCard(id, price){
         id: id,
         ...products[id],
         qty: 1
-     };
+      };
+    }
   }
 
   updateCart();
