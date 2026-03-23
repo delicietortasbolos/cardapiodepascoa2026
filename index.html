@@ -515,9 +515,7 @@
   }
 
    #btn-copiar-pix:hover {
-    background: #c49b2c;
     color: var(--cream-light);
-    transform: scale(1.05);
     background: var(--brown-warm);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0,0,0,0.2);
@@ -1023,7 +1021,7 @@
 </div><!-- /content -->
 
 <!-- CART BAR -->
-<div class="cart-bar" id="cartBar" style="display:none" onclick="goStep(currentStep<2?2:currentStep)">
+<div class="cart-bar" id="cartBar" onclick="toggleCart()">
   <div>
     <div class="cart-items" id="cart-items-label">0 itens</div>
     <div class="cart-cta">Continuar →</div>
@@ -1116,6 +1114,9 @@ function toggleCard(id, price){
     card.classList.remove('selected');
     extras.style.display = 'none';
     delete selected[key];
+    
+    // RESETAR SELECTS
+    document.querySelectorAll(`#extras-${id} select`).forEach(s => s.selectedIndex = 0);
   } else {
     // MARCAR
     card.classList.add('selected');
@@ -1131,6 +1132,7 @@ function toggleCard(id, price){
   }
 
   updateCart();
+  renderCart();
 }
 
 function removeItem(id){
@@ -1148,6 +1150,7 @@ function removeItem(id){
   }
 
   updateCart();
+  renderCart();
 }
 
 function changeQty(key, delta){
@@ -1159,6 +1162,7 @@ function changeQty(key, delta){
   document.getElementById('qty-' + key).textContent = selected[key].qty;
 
   updateCart();
+  renderCart();
 }
 
 function updateCart(){
@@ -1445,6 +1449,78 @@ function novoP(){
   [1,2,3,4,5].forEach(i=>document.getElementById('day-'+i).classList.remove('selected'));
   updateCart();
   goStep(1);
+}
+function toggleCart(){
+  const modal = document.getElementById('cartModal');
+
+  if(modal.style.display === 'block'){
+    modal.style.display = 'none';
+  } else {
+    modal.style.display = 'block';
+    renderCart(); // atualiza quando abrir
+  }
+}
+function renderCart(){
+  const list = document.getElementById('cart-items-list');
+  list.innerHTML = '';
+
+  let total = 0;
+
+  Object.keys(selected).forEach(k => {
+    const p = selected[k];
+    const qty = p.qty || 1;
+    const subtotal = p.price * qty;
+
+    total += subtotal;
+
+    list.innerHTML += `
+      <div style="border-bottom:1px solid #eee; padding:10px 0;">
+        
+        <div style="font-weight:600;">${p.name}</div>
+
+        <div style="font-size:0.8rem; color:#666;">
+          ${getFlavorText(p.id)}
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+          
+          <div>
+            <button onclick="changeQty('${p.id}', -1)">−</button>
+            <span style="margin:0 8px;">${qty}</span>
+            <button onclick="changeQty('${p.id}', 1)">+</button>
+          </div>
+
+          <div>${fmtMoney(subtotal)}</div>
+        </div>
+
+        <button onclick="removeItem('${p.id}')" style="
+          margin-top:5px;
+          background:#ff5252;
+          color:white;
+          border:none;
+          padding:4px 8px;
+          border-radius:5px;
+          cursor:pointer;">
+          Remover
+        </button>
+
+      </div>
+    `;
+  });
+
+  document.getElementById('cart-total-modal').textContent = fmtMoney(total);
+}
+function getFlavorText(id){
+  const f1 = document.getElementById('flavor-'+id+'-1')?.value || '';
+  const f2 = document.getElementById('flavor-'+id+'-2')?.value || '';
+  const c  = document.getElementById('casca-'+id)?.value || '';
+
+  let txt = '';
+  if(f1) txt += f1;
+  if(f2) txt += ' / ' + f2;
+  if(c) txt += ' | Casca: ' + c;
+
+  return txt;
 }
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"7f7b0fd8732c4326aae4b9d58d5c514a","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
