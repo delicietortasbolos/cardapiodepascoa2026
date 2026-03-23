@@ -1026,6 +1026,23 @@
   <div class="cart-total" id="cart-total-label">R$0,00</div>
 </div>
 
+<div id="cartModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999;">
+  <div style="background:white; width:100%; max-width:400px; height:100%; margin-left:auto; padding:1rem; overflow:auto;">
+    
+    <h2 style="margin-bottom:1rem;">🛒 Seu Carrinho</h2>
+
+    <div id="cart-items-list"></div>
+
+    <div style="margin-top:1rem; font-weight:bold;">
+      Total: <span id="cart-total-modal">R$0,00</span>
+    </div>
+
+    <button class="btn-primary" onclick="goStep(2)">Continuar Pedido</button>
+    <button class="btn-secondary" onclick="toggleCart()">Fechar</button>
+
+  </div>
+</div>
+
 <script>
 // DATA
 const products = {
@@ -1097,11 +1114,29 @@ function toggleCard(id, price){
     card.classList.add('selected');
     extras.style.display = 'block';
 
-    selected[key] = {
-      id: id,
-      ...products[id],
-      qty: 1
-    };
+    if(!selected[key]){
+      selected[key] = {
+        id: id,
+        ...products[id],
+        qty: 1
+     };
+  }
+
+  updateCart();
+}
+
+function removeItem(id){
+  delete selected[id];
+
+  const card = document.getElementById('card-' + id);
+  const extras = document.getElementById('extras-' + id);
+
+  if(card){
+    card.classList.remove('selected');
+  }
+
+  if(extras){
+    extras.style.display = 'none';
   }
 
   updateCart();
@@ -1109,7 +1144,12 @@ function toggleCard(id, price){
 
 function changeQty(key, delta){
   if(!selected[key]) return;
+
   selected[key].qty = Math.max(1, (selected[key].qty||1)+delta);
+
+  // ✅ ATUALIZA O NÚMERO NA TELA
+  document.getElementById('qty-' + key).textContent = selected[key].qty;
+
   updateCart();
 }
 
@@ -1161,7 +1201,9 @@ function goStep(n){
   // validate
   if(n===2){
     if(Object.keys(selected).length===0){
-      document.getElementById('step1-error').textContent='⚠ Selecione pelo menos um produto.';
+      const err = document.getElementById('step1-error');
+      err.textContent = '⚠ Selecione pelo menos um produto.';
+      err.style.display = 'block';
       return;
     }
     
@@ -1181,6 +1223,7 @@ function goStep(n){
         errorMsg = '⚠ Por favor, selecione o sabor e a casca de todos os produtos.';
         flavor1.style.borderColor = '#d32f2f';
         flavor1.style.animation = 'shake 0.3s';
+        setTimeout(() => flavor1.style.animation = '', 300);
       } else if(flavor1) {
         flavor1.style.borderColor = '';
       }
@@ -1250,12 +1293,12 @@ function buildSummary(){
   const items = document.getElementById('summary-items');
   items.innerHTML='';
   Object.keys(selected).forEach(k=>{
-    const p=selected[k];
+    const p = selected[k];
+    const id = selected[k].id; 
     const qty=p.qty||1;
     const subtotal=p.price*qty;
     // get flavor info
     let fl = '';
-    const id = selected[k].id;
     if(document.getElementById('flavor-'+id+'-1')){
       const f1 = document.getElementById('flavor-'+id+'-1').value;
       const f2el = document.getElementById('flavor-'+id+'-2');
@@ -1268,9 +1311,28 @@ function buildSummary(){
     }
     items.innerHTML+=`
       <div class="summary-row">
-        <div><div class="label">${p.name}</div>${fl?`<div style="font-size:0.75rem;color:var(--brown-mid)">${fl}</div>`:''}</div>
-        <div class="value">${qty>1?qty+'×':''} ${fmtMoney(subtotal)}</div>
-      </div>`;
+        <div>
+          <div class="label">${p.name}</div>
+          ${fl?`<div style="font-size:0.75rem;color:var(--brown-mid)">${fl}</div>`:''}
+
+          <!-- ✅ BOTÃO REMOVER -->
+          <button onclick="removeItem('${id}')" style="
+            margin-top:5px;
+            background:#ff5252;
+            border:none;
+            color:white;
+            padding:4px 10px;
+            border-radius:6px;
+            font-size:0.75rem;
+            cursor:pointer;">
+            Remover
+          </button>
+       </div>
+
+      <div class="value">
+      ${qty>1?qty+'×':''} ${fmtMoney(subtotal)}
+      </div>
+    </div>`;
   });
   const total=getTotal();
   document.getElementById('sum-nome').textContent=document.getElementById('f-nome').value.trim();
