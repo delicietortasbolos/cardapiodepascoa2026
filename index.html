@@ -493,6 +493,8 @@
     transition: all 0.2s;
     -webkit-appearance: none;
     appearance: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
   }
 
   .pix-key-box span {
@@ -516,6 +518,9 @@
     background: #c49b2c;
     color: var(--cream-light);
     transform: scale(1.05);
+    background: var(--brown-warm);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
   }
   .btn-primary:hover { background: var(--brown-warm); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -647,7 +652,7 @@
       </div>
       <div style="height:0.6rem"></div>
 
-      <div class="product-card" id="card-t1" onclick="toggleCard('t1',25)">
+      <div class="product-card" id="card-t1" onclick="handleCardClick(event, 't1',25)"
         <div class="card-check" id="check-t1">✓</div>
         <div class="card-body">
           <div class="card-name">50g Kit com 2</div>
@@ -1044,6 +1049,14 @@
 </div>
 
 <script>
+function handleCardClick(e, id, price){
+  // se clicou em select ou botão, NÃO faz nada
+  if(e.target.closest('select') || e.target.closest('button')) return;
+
+  // senão, executa normal
+  toggleCard(id, price);
+}
+
 // DATA
 const products = {
   t1:{ name:'Ovos Tradicionais — 50g Kit com 2', price:25, qty:1 },
@@ -1068,27 +1081,21 @@ function copiarPix() {
   const texto = document.getElementById("pix-chave").innerText;
   const botao = document.getElementById("btn-copiar-pix");
 
-  const inputTemp = document.createElement("textarea");
-  inputTemp.value = texto;
+  navigator.clipboard.writeText(texto)
+    .then(() => {
+      const textoOriginal = botao.innerHTML;
 
-  document.body.appendChild(inputTemp);
+      botao.innerHTML = "✅ Copiado!";
+      botao.style.background = "#4CAF50";
 
-  inputTemp.select();
-  inputTemp.setSelectionRange(0, 99999);
-
-  document.execCommand("copy");
-
-  document.body.removeChild(inputTemp);
-
-  const textoOriginal = botao.innerHTML;
-
-  botao.innerHTML = "✅ Copiado!";
-  botao.style.background = "#4CAF50";
-
-  setTimeout(() => {
-    botao.innerHTML = textoOriginal;
-    botao.style.background = "#d4af37";
-  }, 2000);
+      setTimeout(() => {
+        botao.innerHTML = textoOriginal;
+        botao.style.background = "#d4af37";
+      }, 2000);
+    })
+    .catch(() => {
+      alert("Erro ao copiar. Tente copiar manualmente.");
+    });
 
 }
   
@@ -1267,7 +1274,7 @@ function goStep(n){
     document.getElementById('err-dia').textContent='';
     document.getElementById('err-hora').textContent='';
     if(!nome){ document.getElementById('err-nome').textContent='⚠ Informe seu nome.'; ok=false; }
-    if(tel.length<14){ document.getElementById('err-tel').textContent='⚠ Telefone inválido.'; ok=false; }
+    if(tel.replace(/\D/g,'').length < 11){ document.getElementById('err-tel').textContent='⚠ Telefone inválido.'; ok=false; }
     if(!selectedDay){ document.getElementById('err-dia').textContent='⚠ Selecione o dia de retirada.'; ok=false; }
     if(!selectedTime){ document.getElementById('err-hora').textContent='⚠ Selecione o horário de retirada.'; ok=false; }
     if(!ok) return;
