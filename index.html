@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-<title>Cardápio de Páscoa 2026 - Delicie Tortas e Bolos</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
+<title>Cardápio de Páscoa 2026 - Delicie Tortas e Bolos</title>
 <style>
   :root {
     --brown-dark: #3b1f0e;
@@ -49,7 +47,6 @@
   .header-bar-top {
     height: 6px;
     background: linear-gradient(90deg, var(--brown-dark), var(--brown-warm), var(--gold), var(--brown-warm), var(--brown-dark));
-    margin-bottom: 0;
   }
   .egg-icon { font-size: 2.8rem; margin-bottom: 0.3rem; display: block; }
   .subtitle-label {
@@ -167,16 +164,6 @@
     color: var(--brown-mid);
     margin-top: 0.3rem;
   }
-  .divider {
-    display: flex; align-items: center; gap: 0.7rem;
-    margin: 1.2rem 0;
-  }
-  .divider::before, .divider::after {
-    content: ''; flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
-  }
-  .divider span { font-size: 0.9rem; color: var(--gold); }
 
   /* ── PRODUCT CARD ── */
   .products-group { margin-bottom: 1.5rem; }
@@ -206,13 +193,15 @@
     border-radius: 8px;
     padding: 1rem 1.2rem;
     margin-bottom: 0.7rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
     overflow: hidden;
+  }
+  .product-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
   .product-card::before {
     content: '';
@@ -223,8 +212,8 @@
     transition: background 0.2s;
   }
   .product-card:hover { border-color: var(--gold); box-shadow: 0 2px 12px rgba(201,168,76,0.15); }
-  .product-card.selected { border-color: var(--gold); background: linear-gradient(135deg, #fffaf2, white); }
-  .product-card.selected::before { background: var(--gold); }
+  .product-card.open { border-color: var(--gold); background: linear-gradient(135deg, #fffaf2, white); }
+  .product-card.open::before { background: var(--gold); }
 
   .card-check {
     width: 22px; height: 22px;
@@ -235,11 +224,6 @@
     transition: all 0.2s;
     color: transparent;
     font-size: 0.75rem;
-  }
-  .product-card.selected .card-check {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: white;
   }
 
   .card-body { flex: 1; }
@@ -263,6 +247,15 @@
     flex-shrink: 0;
   }
 
+  /* extras panel */
+  .extras-panel {
+    display: none;
+    margin-top: 0.9rem;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding-top: 0.9rem;
+  }
+  .extras-panel.visible { display: block; }
+
   /* qty */
   .qty-control {
     display: flex; align-items: center; gap: 0.5rem;
@@ -278,7 +271,6 @@
     font-size: 1rem;
     display: flex; align-items: center; justify-content: center;
     transition: all 0.15s;
-    font-family: monospace;
   }
   .qty-btn:hover { background: var(--gold); color: white; }
   .qty-num {
@@ -304,33 +296,36 @@
     cursor: pointer;
   }
   .flavor-select:focus { border-color: var(--gold); }
-  
-  /* Feedback visual quando select está preenchido */
-  .flavor-select:valid:not([value=""]) {
-    border-color: #4caf50;
-    background: #f1f8f4;
+
+  /* cart items list */
+  .cart-items-list {
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    background: rgba(59,31,14,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 6px;
   }
-  
-  /* Destaque para selects vazios quando produto está selecionado */
-  .flavor-select:invalid {
-    border-color: #ff9800;
-    background: #fff8f0;
+  .cart-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed rgba(201,168,76,0.2);
+    font-size: 0.82rem;
+    gap: 0.5rem;
   }
-  
-  /* Melhor visualização no mobile */
-  @media (max-width: 600px) {
-    .flavor-select {
-      font-size: 0.95rem;
-      padding: 0.6rem 0.7rem;
-      min-height: 42px; /* Melhor para toque no mobile */
-    }
-  }
-  
-  /* Animação de shake para campos inválidos */
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+  .cart-item-row:last-child { border-bottom: none; }
+  .cart-item-name { color: var(--brown-dark); font-weight: 600; flex: 1; }
+  .cart-item-detail { color: var(--brown-mid); font-size: 0.75rem; }
+  .cart-item-price { color: var(--brown-warm); font-weight: 700; white-space: nowrap; }
+  .cart-item-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #c0392b;
+    font-size: 1rem;
+    padding: 0 0.2rem;
+    line-height: 1;
   }
 
   /* ── FORM ── */
@@ -424,7 +419,7 @@
     margin-top: 0.1rem;
   }
 
-  /* ── PIX CONFIRMATION ── */
+  /* ── PIX ── */
   .pix-box {
     background: linear-gradient(135deg, #fffaf2, #fdf6ee);
     border: 2px solid var(--gold-light);
@@ -450,7 +445,7 @@
     margin: 0.8rem 0;
   }
   .pix-key-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.3rem; }
-  .pix-key-value { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; font-family: 'Open Sans', serif; }
+  .pix-key-value { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; font-family: 'Open Sans', serif; margin-bottom: 0.7rem; }
   .pix-amount-box {
     background: var(--gold);
     color: white;
@@ -499,39 +494,9 @@
     -webkit-appearance: none;
     appearance: none;
   }
-
-  .pix-key-box span {
-     font-size: 18px;
-     font-weight: bold;
-     display: block;
-     margin-bottom: 10px;
-  }
-
-   #btn-copiar-pix {
-     background: #d4af37;
-     border: none;
-     padding: 10px 15px;
-     border-radius: 8px;
-     cursor: pointer;
-     font-weight: bold;
-  }
-
-   #btn-copiar-pix:hover {
-    background: #c49b2c;
-    color: var(--cream-light);
-    border: none;
-    border-radius: 8px;
-    font-family: 'Open Sans', serif;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 0.5rem;
-  }
   .btn-primary:hover { background: var(--brown-warm); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
   .btn-secondary {
     width: 100%;
     padding: 0.8rem;
@@ -548,7 +513,53 @@
   }
   .btn-secondary:hover { border-color: var(--gold); color: var(--brown-dark); }
 
-  .error-msg { font-size: 0.78rem; color: #c0392b; margin-top: 0.3rem; }
+  .btn-add {
+    margin-top: 0.8rem;
+    padding: 0.55rem 1rem;
+    background: transparent;
+    color: var(--brown-dark);
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    font-family: 'Open Sans', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .btn-add:hover { background: var(--gold); color: white; }
+
+  #btn-copiar-pix {
+    background: var(--gold);
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    color: white;
+    font-family: 'Open Sans', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  #btn-copiar-pix:hover { background: #b8943e; }
+
+  .error-msg {
+    font-size: 0.78rem;
+    color: #c0392b;
+    margin-top: 0.3rem;
+  }
+  .error-banner {
+    display: none;
+    margin: 0 0 1rem 0;
+    padding: 0.8rem;
+    background: #ffebee;
+    border-left: 4px solid #d32f2f;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #c0392b;
+  }
 
   /* ── CART BAR ── */
   .cart-bar {
@@ -557,7 +568,7 @@
     background: var(--brown-dark);
     color: var(--cream-light);
     padding: 0.9rem 1.5rem;
-    display: flex;
+    display: none;
     justify-content: space-between;
     align-items: center;
     font-family: 'Open Sans', serif;
@@ -568,7 +579,7 @@
     transition: background 0.2s;
   }
   .cart-bar:hover { background: var(--brown-mid); }
-  .cart-bar .cart-items { opacity: 0.8; font-size: 0.85rem; }
+  .cart-bar .cart-items-count { opacity: 0.8; font-size: 0.85rem; }
   .cart-bar .cart-total { font-family: 'Open Sans', serif; font-size: 1.1rem; font-weight: 700; }
   .cart-bar .cart-cta { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.9; }
 
@@ -597,6 +608,7 @@
   }
   .time-btn:hover { border-color: var(--gold); color: var(--brown-dark); }
   .time-btn.selected { background: var(--brown-dark); border-color: var(--brown-dark); color: var(--cream-light); }
+
   .address-box {
     background: linear-gradient(135deg, #fffaf2, #fdf6ee);
     border: 1.5px solid rgba(201,168,76,0.35);
@@ -611,11 +623,11 @@
   .address-title { font-family: 'Open Sans', serif; font-size: 0.85rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 0.2rem; }
   .address-text { font-size: 0.82rem; color: var(--brown-mid); line-height: 1.5; }
   .address-text strong { color: var(--brown-dark); }
+
   @media (max-width: 400px) {
     .day-grid { grid-template-columns: repeat(3, 1fr); }
     .time-grid { grid-template-columns: repeat(3, 1fr); }
   }
-  
 </style>
 </head>
 <body>
@@ -648,115 +660,131 @@
   <div class="step-page active" id="page1">
     <div class="section-heading">
       <h2>Escolha seus Ovos 🍫</h2>
-      <p>Selecione os itens e <strong style="color:#d32f2f;">não esqueça de escolher os sabores e casca!</strong></p>
+      <p>Clique no produto, escolha o sabor e a casca, depois clique em <strong>Adicionar ao Pedido</strong>.</p>
     </div>
-    <div class="error-msg" id="step1-error" style="margin:0 0 1rem 0;padding:0.8rem;background:#ffebee;border-left:4px solid #d32f2f;border-radius:4px;font-size:0.9rem;"></div>
+
+    <div class="error-banner" id="step1-error"></div>
 
     <!-- TRADICIONAIS -->
     <div class="products-group">
       <div class="group-title">🥚 Ovos Tradicionais</div>
       <div class="group-info">
-        <strong>Casca:</strong> Chocolate branco ou meio amargo<br>
+        <strong>Casca:</strong> Chocolate branco ou meio amargo &nbsp;|&nbsp;
         <strong>Sabores:</strong> Chocolate, Ninho, Amendoim, Coco, Creme de Morango
       </div>
       <div style="height:0.6rem"></div>
 
-      <div class="product-card" id="card-t1" onclick="toggleCard('t1',25)">
-        <div class="card-check" id="check-t1">✓</div>
-        <div class="card-body">
-          <div class="card-name">50g Kit com 2</div>
-          <div class="card-desc">Dois mini ovos de chocolate</div>
-          <div id="extras-t1" style="display:none">
-            <select class="flavor-select" id="flavor-t1-1" onclick="event.stopPropagation()" required>
-              <option value="" disabled selected>— Selecione Sabor 1 —</option>
-              <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
-            </select>
-            <select class="flavor-select" id="flavor-t1-2" onclick="event.stopPropagation()" required>
-              <option value="" disabled selected>— Selecione Sabor 2 —</option>
-              <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
-            </select>
-            <select class="flavor-select" id="casca-t1" onclick="event.stopPropagation()" required>
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="error-msg" id="error-t1" style="color:#d32f2f;font-size:0.75rem;margin-top:0.3rem;display:none;"></div>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('t1',-1)">−</button>
-              <span class="qty-num" id="qty-t1">1</span>
-              <button class="qty-btn" onclick="changeQty('t1',1)">+</button>
-            </div>
+      <!-- t1 -->
+      <div class="product-card" id="card-t1">
+        <div class="product-card-header" onclick="toggleCard('t1')">
+          <div class="card-check" id="check-t1"></div>
+          <div class="card-body">
+            <div class="card-name">50g Kit com 2</div>
+            <div class="card-desc">Dois mini ovos de chocolate</div>
           </div>
+          <div class="card-price">R$25</div>
         </div>
-        <div class="card-price">R$25</div>
+        <div class="extras-panel" id="extras-t1">
+          <select class="flavor-select" id="flavor-t1-1">
+            <option value="" disabled selected>— Selecione Sabor 1 —</option>
+            <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
+          </select>
+          <select class="flavor-select" id="flavor-t1-2">
+            <option value="" disabled selected>— Selecione Sabor 2 —</option>
+            <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
+          </select>
+          <select class="flavor-select" id="casca-t1">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('t1',-1)">−</button>
+            <span class="qty-num" id="qty-t1">1</span>
+            <button class="qty-btn" onclick="changeQty('t1',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('t1')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
 
-      <div class="product-card" id="card-t2" onclick="toggleCard('t2',13)">
-        <div class="card-check" id="check-t2">✓</div>
-        <div class="card-body">
-          <div class="card-name">50g Unidade</div>
-          <div id="extras-t2" style="display:none">
-            <select class="flavor-select" id="flavor-t2-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione o Sabor —</option>
-              <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
-            </select>
-            <select class="flavor-select" id="casca-t2" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('t2',-1)">−</button>
-              <span class="qty-num" id="qty-t2">1</span>
-              <button class="qty-btn" onclick="changeQty('t2',1)">+</button>
-            </div>
+      <!-- t2 -->
+      <div class="product-card" id="card-t2">
+        <div class="product-card-header" onclick="toggleCard('t2')">
+          <div class="card-check" id="check-t2"></div>
+          <div class="card-body">
+            <div class="card-name">50g Unidade</div>
           </div>
+          <div class="card-price">R$13</div>
         </div>
-        <div class="card-price">R$13</div>
+        <div class="extras-panel" id="extras-t2">
+          <select class="flavor-select" id="flavor-t2-1">
+            <option value="" disabled selected>— Selecione o Sabor —</option>
+            <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
+          </select>
+          <select class="flavor-select" id="casca-t2">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('t2',-1)">−</button>
+            <span class="qty-num" id="qty-t2">1</span>
+            <button class="qty-btn" onclick="changeQty('t2',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('t2')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
 
-      <div class="product-card" id="card-t3" onclick="toggleCard('t3',34)">
-        <div class="card-check" id="check-t3">✓</div>
-        <div class="card-body">
-          <div class="card-name">100g Unidade</div>
-          <div id="extras-t3" style="display:none">
-            <select class="flavor-select" id="flavor-t3-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione o Sabor —</option>
-              <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
-            </select>
-            <select class="flavor-select" id="casca-t3" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('t3',-1)">−</button>
-              <span class="qty-num" id="qty-t3">1</span>
-              <button class="qty-btn" onclick="changeQty('t3',1)">+</button>
-            </div>
+      <!-- t3 -->
+      <div class="product-card" id="card-t3">
+        <div class="product-card-header" onclick="toggleCard('t3')">
+          <div class="card-check" id="check-t3"></div>
+          <div class="card-body">
+            <div class="card-name">100g Unidade</div>
           </div>
+          <div class="card-price">R$34</div>
         </div>
-        <div class="card-price">R$34</div>
+        <div class="extras-panel" id="extras-t3">
+          <select class="flavor-select" id="flavor-t3-1">
+            <option value="" disabled selected>— Selecione o Sabor —</option>
+            <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
+          </select>
+          <select class="flavor-select" id="casca-t3">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('t3',-1)">−</button>
+            <span class="qty-num" id="qty-t3">1</span>
+            <button class="qty-btn" onclick="changeQty('t3',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('t3')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
 
-      <div class="product-card" id="card-t4" onclick="toggleCard('t4',70)">
-        <div class="card-check" id="check-t4">✓</div>
-        <div class="card-body">
-          <div class="card-name">250g Unidade</div>
-          <div id="extras-t4" style="display:none">
-            <select class="flavor-select" id="flavor-t4-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione o Sabor —</option>
-              <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
-            </select>
-            <select class="flavor-select" id="casca-t4" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('t4',-1)">−</button>
-              <span class="qty-num" id="qty-t4">1</span>
-              <button class="qty-btn" onclick="changeQty('t4',1)">+</button>
-            </div>
+      <!-- t4 -->
+      <div class="product-card" id="card-t4">
+        <div class="product-card-header" onclick="toggleCard('t4')">
+          <div class="card-check" id="check-t4"></div>
+          <div class="card-body">
+            <div class="card-name">250g Unidade</div>
           </div>
+          <div class="card-price">R$70</div>
         </div>
-        <div class="card-price">R$70</div>
+        <div class="extras-panel" id="extras-t4">
+          <select class="flavor-select" id="flavor-t4-1">
+            <option value="" disabled selected>— Selecione o Sabor —</option>
+            <option>Chocolate</option><option>Ninho</option><option>Amendoim</option><option>Coco</option><option>Creme de Morango</option>
+          </select>
+          <select class="flavor-select" id="casca-t4">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('t4',-1)">−</button>
+            <span class="qty-num" id="qty-t4">1</span>
+            <button class="qty-btn" onclick="changeQty('t4',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('t4')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
     </div>
 
@@ -764,109 +792,131 @@
     <div class="products-group">
       <div class="group-title">⭐ Ovos Premium</div>
       <div class="group-info">
-        <strong>Casca:</strong> Chocolate branco ou meio amargo<br>
+        <strong>Casca:</strong> Chocolate branco ou meio amargo &nbsp;|&nbsp;
         <strong>Sabores:</strong> Ninho com Nutella, Ferreiro, Confete, Kit Kat, Maracujá com Nutella
       </div>
       <div style="height:0.6rem"></div>
 
-      <div class="product-card" id="card-p1" onclick="toggleCard('p1',29)">
-        <div class="card-check" id="check-p1">✓</div>
-        <div class="card-body">
-          <div class="card-name">50g Kit com 2</div>
-          <div class="card-desc">Dois mini ovos premium</div>
-          <div id="extras-p1" style="display:none">
-            <select class="flavor-select" id="flavor-p1-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione Sabor 1 —</option>
-              <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
-            </select>
-            <select class="flavor-select" id="flavor-p1-2" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione Sabor 2 —</option>
-              <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
-            </select>
-            <select class="flavor-select" id="casca-p1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('p1',-1)">−</button>
-              <span class="qty-num" id="qty-p1">1</span>
-              <button class="qty-btn" onclick="changeQty('p1',1)">+</button>
-            </div>
+      <!-- p1 -->
+      <div class="product-card" id="card-p1">
+        <div class="product-card-header" onclick="toggleCard('p1')">
+          <div class="card-check" id="check-p1"></div>
+          <div class="card-body">
+            <div class="card-name">50g Kit com 2</div>
+            <div class="card-desc">Dois mini ovos premium</div>
           </div>
+          <div class="card-price">R$29</div>
         </div>
-        <div class="card-price">R$29</div>
+        <div class="extras-panel" id="extras-p1">
+          <select class="flavor-select" id="flavor-p1-1">
+            <option value="" disabled selected>— Selecione Sabor 1 —</option>
+            <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
+          </select>
+          <select class="flavor-select" id="flavor-p1-2">
+            <option value="" disabled selected>— Selecione Sabor 2 —</option>
+            <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
+          </select>
+          <select class="flavor-select" id="casca-p1">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('p1',-1)">−</button>
+            <span class="qty-num" id="qty-p1">1</span>
+            <button class="qty-btn" onclick="changeQty('p1',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('p1')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
 
-      <div class="product-card" id="card-p2" onclick="toggleCard('p2',15)">
-        <div class="card-check" id="check-p2">✓</div>
-        <div class="card-body">
-          <div class="card-name">50g Unidade</div>
-          <div id="extras-p2" style="display:none">
-            <select class="flavor-select" id="flavor-p2-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione o Sabor —</option>
-              <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
-            </select>
-            <select class="flavor-select" id="casca-p2" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('p2',-1)">−</button>
-              <span class="qty-num" id="qty-p2">1</span>
-              <button class="qty-btn" onclick="changeQty('p2',1)">+</button>
-            </div>
+      <!-- p2 -->
+      <div class="product-card" id="card-p2">
+        <div class="product-card-header" onclick="toggleCard('p2')">
+          <div class="card-check" id="check-p2"></div>
+          <div class="card-body">
+            <div class="card-name">50g Unidade</div>
           </div>
+          <div class="card-price">R$15</div>
         </div>
-        <div class="card-price">R$15</div>
+        <div class="extras-panel" id="extras-p2">
+          <select class="flavor-select" id="flavor-p2-1">
+            <option value="" disabled selected>— Selecione o Sabor —</option>
+            <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
+          </select>
+          <select class="flavor-select" id="casca-p2">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('p2',-1)">−</button>
+            <span class="qty-num" id="qty-p2">1</span>
+            <button class="qty-btn" onclick="changeQty('p2',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('p2')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
 
-      <div class="product-card" id="card-p3" onclick="toggleCard('p3',38)">
-        <div class="card-check" id="check-p3">✓</div>
-        <div class="card-body">
-          <div class="card-name">100g Unidade</div>
-          <div id="extras-p3" style="display:none">
-            <select class="flavor-select" id="flavor-p3-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione o Sabor —</option>
-              <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
-            </select>
-            <select class="flavor-select" id="casca-p3" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('p3',-1)">−</button>
-              <span class="qty-num" id="qty-p3">1</span>
-              <button class="qty-btn" onclick="changeQty('p3',1)">+</button>
-            </div>
+      <!-- p3 -->
+      <div class="product-card" id="card-p3">
+        <div class="product-card-header" onclick="toggleCard('p3')">
+          <div class="card-check" id="check-p3"></div>
+          <div class="card-body">
+            <div class="card-name">100g Unidade</div>
           </div>
+          <div class="card-price">R$38</div>
         </div>
-        <div class="card-price">R$38</div>
+        <div class="extras-panel" id="extras-p3">
+          <select class="flavor-select" id="flavor-p3-1">
+            <option value="" disabled selected>— Selecione o Sabor —</option>
+            <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
+          </select>
+          <select class="flavor-select" id="casca-p3">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('p3',-1)">−</button>
+            <span class="qty-num" id="qty-p3">1</span>
+            <button class="qty-btn" onclick="changeQty('p3',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('p3')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
 
-      <div class="product-card" id="card-p4" onclick="toggleCard('p4',90)">
-        <div class="card-check" id="check-p4">✓</div>
-        <div class="card-body">
-          <div class="card-name">250g Unidade</div>
-          <div id="extras-p4" style="display:none">
-            <select class="flavor-select" id="flavor-p4-1" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione o Sabor —</option>
-              <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
-            </select>
-            <select class="flavor-select" id="casca-p4" onclick="event.stopPropagation()">
-              <option value="" disabled selected>— Selecione a Casca —</option>
-              <option>Chocolate Branco</option><option>Meio Amargo</option>
-            </select>
-            <div class="qty-control" onclick="event.stopPropagation()">
-              <button class="qty-btn" onclick="changeQty('p4',-1)">−</button>
-              <span class="qty-num" id="qty-p4">1</span>
-              <button class="qty-btn" onclick="changeQty('p4',1)">+</button>
-            </div>
+      <!-- p4 -->
+      <div class="product-card" id="card-p4">
+        <div class="product-card-header" onclick="toggleCard('p4')">
+          <div class="card-check" id="check-p4"></div>
+          <div class="card-body">
+            <div class="card-name">250g Unidade</div>
           </div>
+          <div class="card-price">R$80</div>
         </div>
-        <div class="card-price">R$80</div>
+        <div class="extras-panel" id="extras-p4">
+          <select class="flavor-select" id="flavor-p4-1">
+            <option value="" disabled selected>— Selecione o Sabor —</option>
+            <option>Ninho com Nutella</option><option>Ferreiro</option><option>Confete</option><option>Kit Kat</option><option>Maracujá com Nutella</option>
+          </select>
+          <select class="flavor-select" id="casca-p4">
+            <option value="" disabled selected>— Selecione a Casca —</option>
+            <option>Chocolate Branco</option><option>Meio Amargo</option>
+          </select>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('p4',-1)">−</button>
+            <span class="qty-num" id="qty-p4">1</span>
+            <button class="qty-btn" onclick="changeQty('p4',1)">+</button>
+          </div>
+          <button class="btn-add" onclick="addToCart('p4')">➕ Adicionar ao Pedido</button>
+        </div>
       </div>
     </div>
 
+    <!-- CART ITEMS LIST -->
+    <div id="cart-items-list" style="display:none">
+      <div class="cart-items-list" id="cart-items-inner"></div>
+    </div>
+
+    <div style="height:1rem"></div>
     <button class="btn-primary" onclick="goStep(2)">Continuar →</button>
   </div>
 
@@ -932,7 +982,6 @@
       <div class="error-msg" id="err-hora"></div>
     </div>
 
-    <div id="step2-error" class="error-msg" style="text-align:center"></div>
     <button class="btn-primary" onclick="goStep(3)">Ver Resumo →</button>
     <button class="btn-secondary" onclick="goStep(1)">← Voltar</button>
   </div>
@@ -985,14 +1034,8 @@
 
       <div class="pix-key-box">
         <div class="pix-key-label">Chave Pix — CNPJ</div>
-        <div class="pix-container">
-          <span id="pix-chave">
-            46.579.998/0001-21
-          </span>
-          <button onclick="copiarPix()" id="btn-copiar-pix">
-            COPIAR CHAVE PIX
-          </button>
-        </div>
+        <div class="pix-key-value" id="pix-chave">46.579.998/0001-21</div>
+        <button onclick="copiarPix()" id="btn-copiar-pix">COPIAR CHAVE PIX</button>
       </div>
 
       <div class="pix-amount-box">
@@ -1009,7 +1052,7 @@
       </div>
     </div>
 
-    <button class="btn-primary" onclick="finalizarPedido()">✅ Confirmar pedido com o comprovante de pagamento!</button>
+    <button class="btn-primary" onclick="finalizarPedido()">✅ Confirmar e Enviar Comprovante pelo WhatsApp</button>
     <button class="btn-secondary" onclick="goStep(3)">← Voltar ao Resumo</button>
   </div>
 
@@ -1032,281 +1075,333 @@
 </div><!-- /content -->
 
 <!-- CART BAR -->
-<div class="cart-bar" id="cartBar" style="display:none" onclick="goStep(currentStep<2?2:currentStep)">
+<div class="cart-bar" id="cartBar" onclick="goStep(2)">
   <div>
-    <div class="cart-items" id="cart-items-label">0 itens</div>
+    <div class="cart-items-count" id="cart-items-label">0 itens</div>
     <div class="cart-cta">Continuar →</div>
   </div>
   <div class="cart-total" id="cart-total-label">R$0,00</div>
 </div>
 
 <script>
-// DATA
-const products = {
-  t1:{ name:'Ovos Tradicionais — 50g Kit com 2', price:25, qty:1 },
-  t2:{ name:'Ovos Tradicionais — 50g Unidade', price:13, qty:1 },
-  t3:{ name:'Ovos Tradicionais — 100g Unidade', price:34, qty:1 },
-  t4:{ name:'Ovos Tradicionais — 250g Unidade', price:70, qty:1 },
-  p1:{ name:'Ovos Premium — 50g Kit com 2', price:29, qty:1 },
-  p2:{ name:'Ovos Premium — 50g Unidade', price:15, qty:1 },
-  p3:{ name:'Ovos Premium — 100g Unidade', price:38, qty:1 },
-  p4:{ name:'Ovos Premium — 250g Unidade', price:80, qty:1 },
+// ─────────────────────────────────────────────
+// CATÁLOGO DE PRODUTOS
+// ─────────────────────────────────────────────
+const catalog = {
+  t1:{ name:'Ovos Tradicionais — 50g Kit com 2', price:25, kit2:true },
+  t2:{ name:'Ovos Tradicionais — 50g Unidade',   price:13, kit2:false },
+  t3:{ name:'Ovos Tradicionais — 100g Unidade',  price:34, kit2:false },
+  t4:{ name:'Ovos Tradicionais — 250g Unidade',  price:70, kit2:false },
+  p1:{ name:'Ovos Premium — 50g Kit com 2',      price:29, kit2:true },
+  p2:{ name:'Ovos Premium — 50g Unidade',        price:15, kit2:false },
+  p3:{ name:'Ovos Premium — 100g Unidade',       price:38, kit2:false },
+  p4:{ name:'Ovos Premium — 250g Unidade',       price:80, kit2:false },
 };
-const selected = {};
-  
-function copiarPix() {
 
-  const texto = document.getElementById("pix-chave").innerText;
-  const botao = document.getElementById("btn-copiar-pix");
+// ─────────────────────────────────────────────
+// ESTADO — array de itens adicionados ao carrinho
+// Cada item: { uid, id, name, price, qty, flavor1, flavor2, casca }
+// ─────────────────────────────────────────────
+let cart = [];
+let uidCounter = 0;
 
-  const inputTemp = document.createElement("textarea");
-  inputTemp.value = texto;
+// qty temporária por card (antes de adicionar ao carrinho)
+const tempQty = { t1:1,t2:1,t3:1,t4:1,p1:1,p2:1,p3:1,p4:1 };
 
-  document.body.appendChild(inputTemp);
-
-  inputTemp.select();
-  inputTemp.setSelectionRange(0, 99999);
-
-  navigator.clipboard.writeText(texto);
-
-  document.body.removeChild(inputTemp);
-
-  const textoOriginal = botao.innerHTML;
-
-  botao.innerHTML = "✅ Copiado!";
-  botao.style.background = "#4CAF50";
-
-  setTimeout(() => {
-    botao.innerHTML = textoOriginal;
-    botao.style.background = "#d4af37";
-  }, 2000);
-
-}
-  
-let selectedDay = null;
+let selectedDay  = null;
 let selectedTime = null;
-let currentStep = 1;
+let currentStep  = 1;
 
-function fmtMoney(v){ return 'R$'+v.toFixed(2).replace('.',','); }
+const WHATSAPP_NUMBER = '5524998473901';
 
-function toggleCard(id, price){
-  const card = document.getElementById('card-'+id);
-  const extras = document.getElementById('extras-'+id);
-  if(selected[id]){
-    delete selected[id];
-    card.classList.remove('selected');
-    extras.style.display='none';
-  } else {
-    selected[id] = { ...products[id] };
-    card.classList.add('selected');
-    extras.style.display='block';
-  }
-  updateCart();
-}
-
-function changeQty(id, delta){
-  if(!selected[id]) return;
-  selected[id].qty = Math.max(1, (selected[id].qty||1)+delta);
-  document.getElementById('qty-'+id).textContent = selected[id].qty;
-  updateCart();
-}
-
-function updateCart(){
-  const keys = Object.keys(selected);
-  let total = 0;
-  keys.forEach(k => { total += selected[k].price * (selected[k].qty||1); });
-  const bar = document.getElementById('cartBar');
-  if(keys.length > 0){
-    bar.style.display='flex';
-    document.getElementById('cart-items-label').textContent = keys.length+' item(s) selecionado(s)';
-    document.getElementById('cart-total-label').textContent = fmtMoney(total);
-  } else {
-    bar.style.display='none';
-  }
-}
+// ─────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────
+function fmtMoney(v){ return 'R$' + v.toFixed(2).replace('.',','); }
 
 function getTotal(){
-  return Object.keys(selected).reduce((s,k)=>s+selected[k].price*(selected[k].qty||1),0);
+  return cart.reduce((s, item) => s + item.price * item.qty, 0);
 }
 
+// ─────────────────────────────────────────────
+// TOGGLE CARD (abre/fecha painel de extras)
+// ─────────────────────────────────────────────
+function toggleCard(id){
+  const panel = document.getElementById('extras-' + id);
+  const card  = document.getElementById('card-' + id);
+  const isOpen = panel.classList.contains('visible');
+  panel.classList.toggle('visible', !isOpen);
+  card.classList.toggle('open', !isOpen);
+}
+
+// ─────────────────────────────────────────────
+// QTY TEMPORÁRIA (no card, antes de adicionar)
+// ─────────────────────────────────────────────
+function changeQty(id, delta){
+  tempQty[id] = Math.max(1, (tempQty[id] || 1) + delta);
+  document.getElementById('qty-' + id).textContent = tempQty[id];
+}
+
+// ─────────────────────────────────────────────
+// ADICIONAR AO CARRINHO
+// ─────────────────────────────────────────────
+function addToCart(id){
+  const prod   = catalog[id];
+  const f1El   = document.getElementById('flavor-' + id + '-1');
+  const f2El   = document.getElementById('flavor-' + id + '-2');
+  const cascaEl= document.getElementById('casca-' + id);
+
+  const flavor1 = f1El   ? f1El.value   : '';
+  const flavor2 = f2El   ? f2El.value   : '';
+  const casca   = cascaEl? cascaEl.value : '';
+
+  // Validação
+  if(!flavor1){
+    f1El.style.borderColor = '#d32f2f';
+    f1El.focus();
+    return;
+  }
+  if(prod.kit2 && !flavor2){
+    f2El.style.borderColor = '#d32f2f';
+    f2El.focus();
+    return;
+  }
+  if(!casca){
+    cascaEl.style.borderColor = '#d32f2f';
+    cascaEl.focus();
+    return;
+  }
+
+  // Tudo ok → adiciona
+  cart.push({
+    uid: ++uidCounter,
+    id,
+    name:    prod.name,
+    price:   prod.price,
+    qty:     tempQty[id] || 1,
+    flavor1,
+    flavor2: prod.kit2 ? flavor2 : '',
+    casca
+  });
+
+  // Reseta o card
+  if(f1El)    { f1El.selectedIndex = 0; f1El.style.borderColor = ''; }
+  if(f2El)    { f2El.selectedIndex = 0; f2El.style.borderColor = ''; }
+  if(cascaEl) { cascaEl.selectedIndex = 0; cascaEl.style.borderColor = ''; }
+  tempQty[id] = 1;
+  document.getElementById('qty-' + id).textContent = 1;
+
+  // Fecha o painel
+  document.getElementById('extras-' + id).classList.remove('visible');
+  document.getElementById('card-' + id).classList.remove('open');
+
+  updateCart();
+}
+
+// ─────────────────────────────────────────────
+// REMOVER ITEM DO CARRINHO
+// ─────────────────────────────────────────────
+function removeFromCart(uid){
+  cart = cart.filter(item => item.uid !== uid);
+  updateCart();
+}
+
+// ─────────────────────────────────────────────
+// ATUALIZAR BARRA DO CARRINHO + LISTA INLINE
+// ─────────────────────────────────────────────
+function updateCart(){
+  const bar       = document.getElementById('cartBar');
+  const listWrap  = document.getElementById('cart-items-list');
+  const listInner = document.getElementById('cart-items-inner');
+  const errBanner = document.getElementById('step1-error');
+
+  if(cart.length > 0){
+    bar.style.display = 'flex';
+    errBanner.style.display = 'none';
+
+    const total = getTotal();
+    document.getElementById('cart-items-label').textContent = cart.length + ' item(s)';
+    document.getElementById('cart-total-label').textContent = fmtMoney(total);
+
+    listWrap.style.display = 'block';
+    listInner.innerHTML = '';
+    cart.forEach(item => {
+      let detail = item.flavor1;
+      if(item.flavor2) detail += ' / ' + item.flavor2;
+      detail += ' | Casca: ' + item.casca;
+
+      listInner.innerHTML += `
+        <div class="cart-item-row">
+          <div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-detail">${detail} &nbsp;·&nbsp; Qtd: ${item.qty}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <span class="cart-item-price">${fmtMoney(item.price * item.qty)}</span>
+            <button class="cart-item-remove" onclick="removeFromCart(${item.uid})" title="Remover">✕</button>
+          </div>
+        </div>`;
+    });
+  } else {
+    bar.style.display = 'none';
+    listWrap.style.display = 'none';
+    listInner.innerHTML = '';
+  }
+}
+
+// ─────────────────────────────────────────────
+// DIA E HORÁRIO
+// ─────────────────────────────────────────────
 function selectDay(d){
   selectedDay = d;
-  [1,2,3,4,5].forEach(i=>{
-    document.getElementById('day-'+i).classList.toggle('selected', i===d);
+  [1,2,3,4,5].forEach(i => {
+    document.getElementById('day-' + i).classList.toggle('selected', i === d);
   });
 }
 
 function selectTime(t){
   selectedTime = t;
-  ['10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'].forEach(h=>{
-    const id = 'time-'+h.replace(':00','');
-    document.getElementById(id).classList.toggle('selected', h===t);
+  ['10','11','12','13','14','15','16','17','18','19','20'].forEach(h => {
+    document.getElementById('time-' + h).classList.toggle('selected', h + ':00' === t);
   });
 }
 
+// ─────────────────────────────────────────────
+// MÁSCARA DE TELEFONE
+// ─────────────────────────────────────────────
 function maskTel(el){
   let v = el.value.replace(/\D/g,'');
-  if(v.length>11) v=v.slice(0,11);
-  if(v.length>6) v=v.replace(/^(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');
-  else if(v.length>2) v=v.replace(/^(\d{2})(\d{0,5})/,'($1) $2');
-  else if(v.length>0) v='('+v;
-  el.value=v;
+  if(v.length > 11) v = v.slice(0,11);
+  if(v.length > 6)      v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+  else if(v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+  else if(v.length > 0) v = '(' + v;
+  el.value = v;
 }
 
+// ─────────────────────────────────────────────
+// NAVEGAÇÃO ENTRE PASSOS
+// ─────────────────────────────────────────────
 function goStep(n){
-  // validate
-  if(n===2){
-    if(Object.keys(selected).length===0){
-      document.getElementById('step1-error').textContent='⚠ Selecione pelo menos um produto.';
+
+  // ── Validações ao avançar ──
+  if(n === 2){
+    if(cart.length === 0){
+      const err = document.getElementById('step1-error');
+      err.textContent = '⚠ Selecione e adicione pelo menos um produto ao pedido.';
+      err.style.display = 'block';
+      window.scrollTo({top:0, behavior:'smooth'});
       return;
     }
-    
-    // NOVA VALIDAÇÃO: Verificar se todos os sabores e cascas foram selecionados
-    let allFlavorsSelected = true;
-    let errorMsg = '';
-    
-    Object.keys(selected).forEach(k => {
-      const flavor1 = document.getElementById('flavor-'+k+'-1');
-      const flavor2 = document.getElementById('flavor-'+k+'-2');
-      const casca = document.getElementById('casca-'+k);
-      
-      if(flavor1 && flavor1.value === ''){
-        allFlavorsSelected = false;
-        errorMsg = '⚠ Por favor, selecione o sabor e a casca de todos os produtos.';
-        flavor1.style.borderColor = '#d32f2f';
-        flavor1.style.animation = 'shake 0.3s';
-      } else if(flavor1) {
-        flavor1.style.borderColor = '';
-      }
-      
-      if(flavor2 && flavor2.value === ''){
-        allFlavorsSelected = false;
-        errorMsg = '⚠ Por favor, selecione os 2 sabores e a casca dos kits com 2 unidades.';
-        flavor2.style.borderColor = '#d32f2f';
-        flavor2.style.animation = 'shake 0.3s';
-      } else if(flavor2) {
-        flavor2.style.borderColor = '';
-      }
-      
-      if(casca && casca.value === ''){
-        allFlavorsSelected = false;
-        errorMsg = '⚠ Por favor, selecione a casca de todos os produtos.';
-        casca.style.borderColor = '#d32f2f';
-        casca.style.animation = 'shake 0.3s';
-      } else if(casca) {
-        casca.style.borderColor = '';
-      }
-    });
-    
-    if(!allFlavorsSelected){
-      document.getElementById('step1-error').textContent = errorMsg;
-      document.getElementById('step1-error').style.display = 'block';
-      // Scroll suave até o erro
-      window.scrollTo({top: 0, behavior: 'smooth'});
-      return;
-    }
-    
-    document.getElementById('step1-error').textContent='';
-    document.getElementById('step1-error').style.display='none';
   }
-  if(n===3){
-    let ok=true;
-    const nome=document.getElementById('f-nome').value.trim();
-    const tel=document.getElementById('f-tel').value.trim();
-    document.getElementById('err-nome').textContent='';
-    document.getElementById('err-tel').textContent='';
-    document.getElementById('err-dia').textContent='';
-    document.getElementById('err-hora').textContent='';
-    if(!nome){ document.getElementById('err-nome').textContent='⚠ Informe seu nome.'; ok=false; }
-    if(tel.length<14){ document.getElementById('err-tel').textContent='⚠ Telefone inválido.'; ok=false; }
-    if(!selectedDay){ document.getElementById('err-dia').textContent='⚠ Selecione o dia de retirada.'; ok=false; }
-    if(!selectedTime){ document.getElementById('err-hora').textContent='⚠ Selecione o horário de retirada.'; ok=false; }
+
+  if(n === 3){
+    let ok = true;
+    const nome = document.getElementById('f-nome').value.trim();
+    const tel  = document.getElementById('f-tel').value.trim();
+    ['err-nome','err-tel','err-dia','err-hora'].forEach(id => document.getElementById(id).textContent = '');
+
+    if(!nome)         { document.getElementById('err-nome').textContent = '⚠ Informe seu nome.'; ok = false; }
+    if(tel.length < 14){ document.getElementById('err-tel').textContent = '⚠ Telefone inválido.'; ok = false; }
+    if(!selectedDay)  { document.getElementById('err-dia').textContent  = '⚠ Selecione o dia de retirada.'; ok = false; }
+    if(!selectedTime) { document.getElementById('err-hora').textContent = '⚠ Selecione o horário.'; ok = false; }
     if(!ok) return;
     buildSummary();
   }
-  if(n===4){ buildPix(); }
 
-  currentStep=n;
-  document.querySelectorAll('.step-page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
+  if(n === 4){ buildPix(); }
 
-  // update stepper
-  [1,2,3,4].forEach(i=>{
-    const s=document.getElementById('s'+i);
+  currentStep = n;
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + n).classList.add('active');
+
+  // Atualiza stepper visual
+  [1,2,3,4].forEach(i => {
+    const s = document.getElementById('s' + i);
     s.classList.remove('active','done');
-    if(i<n) s.classList.add('done');
-    else if(i===n) s.classList.add('active');
+    if(i < n)      s.classList.add('done');
+    else if(i === n) s.classList.add('active');
   });
-  window.scrollTo({top:0,behavior:'smooth'});
+
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
+// ─────────────────────────────────────────────
+// MONTAR RESUMO
+// ─────────────────────────────────────────────
 function buildSummary(){
   const items = document.getElementById('summary-items');
-  items.innerHTML='';
-  Object.keys(selected).forEach(k=>{
-    const p=selected[k];
-    const qty=p.qty||1;
-    const subtotal=p.price*qty;
-    // get flavor info
-    let fl='';
-    if(document.getElementById('flavor-'+k+'-1')){
-      const f1=document.getElementById('flavor-'+k+'-1').value;
-      const f2el=document.getElementById('flavor-'+k+'-2');
-      const f2=f2el?f2el.value:'';
-      const ca=document.getElementById('casca-'+k)?document.getElementById('casca-'+k).value:'';
-      if(f1) fl+='Sabor: '+f1;
-      if(f2) fl+=' / '+f2;
-      if(ca) fl+=' | Casca: '+ca;
-    }
-    items.innerHTML+=`
+  items.innerHTML = '';
+
+  cart.forEach(item => {
+    const subtotal = item.price * item.qty;
+    let detail = item.flavor1;
+    if(item.flavor2) detail += ' / ' + item.flavor2;
+    detail += ' | Casca: ' + item.casca;
+
+    items.innerHTML += `
       <div class="summary-row">
-        <div><div class="label">${p.name}</div>${fl?`<div style="font-size:0.75rem;color:var(--brown-mid)">${fl}</div>`:''}</div>
-        <div class="value">${qty>1?qty+'×':''} ${fmtMoney(subtotal)}</div>
+        <div>
+          <div class="label">${item.name}</div>
+          <div style="font-size:0.75rem;color:var(--brown-mid)">${detail}</div>
+        </div>
+        <div class="value">${item.qty > 1 ? item.qty + '×&nbsp;' : ''}${fmtMoney(subtotal)}</div>
       </div>`;
   });
-  const total=getTotal();
-  document.getElementById('sum-nome').textContent=document.getElementById('f-nome').value.trim();
-  document.getElementById('sum-tel').textContent=document.getElementById('f-tel').value.trim();
-  document.getElementById('sum-dia').textContent='0'+selectedDay+' de Abril de 2026';
-  document.getElementById('sum-hora').textContent=selectedTime+'h';
-  document.getElementById('sum-total').textContent=fmtMoney(total);
-  document.getElementById('sum-half').textContent='50% agora: '+fmtMoney(total*0.5)+' via Pix';
+
+  const total = getTotal();
+  document.getElementById('sum-nome').textContent  = document.getElementById('f-nome').value.trim();
+  document.getElementById('sum-tel').textContent   = document.getElementById('f-tel').value.trim();
+  document.getElementById('sum-dia').textContent   = '0' + selectedDay + ' de Abril de 2026';
+  document.getElementById('sum-hora').textContent  = selectedTime + 'h';
+  document.getElementById('sum-total').textContent = fmtMoney(total);
+  document.getElementById('sum-half').textContent  = '50% agora: ' + fmtMoney(total * 0.5) + ' via Pix';
 }
 
+// ─────────────────────────────────────────────
+// MONTAR PIX
+// ─────────────────────────────────────────────
 function buildPix(){
-  const total=getTotal();
-  document.getElementById('pix-valor').textContent=fmtMoney(total*0.5);
-  document.getElementById('pix-resto').textContent=fmtMoney(total*0.5)+' na retirada';
-  document.getElementById('pix-dia').textContent='0'+selectedDay;
-  document.getElementById('pix-hora').textContent=selectedTime+'h';
+  const total = getTotal();
+  document.getElementById('pix-valor').textContent = fmtMoney(total * 0.5);
+  document.getElementById('pix-resto').textContent = fmtMoney(total * 0.5) + ' na retirada';
+  document.getElementById('pix-dia').textContent   = '0' + selectedDay;
+  document.getElementById('pix-hora').textContent  = selectedTime + 'h';
 }
 
-const WHATSAPP_NUMBER = '5524998473901';
+// ─────────────────────────────────────────────
+// COPIAR CHAVE PIX
+// ─────────────────────────────────────────────
+function copiarPix(){
+  const chave = document.getElementById('pix-chave').textContent.trim();
+  const btn   = document.getElementById('btn-copiar-pix');
 
-function finalizarPedido(){
-  // VALIDAÇÃO FINAL: Verificar novamente se todos os campos estão preenchidos
-  let allValid = true;
-  Object.keys(selected).forEach(k => {
-    const flavor1 = document.getElementById('flavor-'+k+'-1');
-    const flavor2 = document.getElementById('flavor-'+k+'-2');
-    const casca = document.getElementById('casca-'+k);
-    
-    if((flavor1 && flavor1.value === '') || (casca && casca.value === '')){
-      allValid = false;
-    }
-    if(flavor2 && flavor2.value === ''){
-      allValid = false;
-    }
+  navigator.clipboard.writeText(chave).then(() => {
+    btn.textContent = '✅ Copiado!';
+    btn.style.background = '#4CAF50';
+    setTimeout(() => {
+      btn.textContent = 'COPIAR CHAVE PIX';
+      btn.style.background = '';
+    }, 2000);
+  }).catch(() => {
+    // fallback para navegadores sem clipboard API
+    const ta = document.createElement('textarea');
+    ta.value = chave;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => { btn.textContent = 'COPIAR CHAVE PIX'; }, 2000);
   });
-  
-  if(!allValid){
-    alert('⚠️ Atenção!\n\nPor favor, selecione o SABOR e a CASCA de todos os produtos antes de finalizar o pedido.\n\nVolte ao passo 1 e complete as informações.');
-    return;
-  }
-  
+}
+
+// ─────────────────────────────────────────────
+// FINALIZAR PEDIDO → WhatsApp
+// ─────────────────────────────────────────────
+function finalizarPedido(){
   const nome  = document.getElementById('f-nome').value.trim();
   const tel   = document.getElementById('f-tel').value.trim();
-  const dia   = '0'+selectedDay+'/04/2026';
+  const dia   = '0' + selectedDay + '/04/2026';
   const total = getTotal();
 
   let msg = '🐣 *NOVO PEDIDO DE PÁSCOA 2026* 🍫\n';
@@ -1318,27 +1413,17 @@ function finalizarPedido(){
   msg += '━━━━━━━━━━━━━━━━━━━━\n';
   msg += '🍫 *Itens do Pedido:*\n';
 
-  Object.keys(selected).forEach(function(k) {
-    const p = selected[k];
-    const qty = p.qty||1;
-    let fl = '';
-    if(document.getElementById('flavor-'+k+'-1')){
-      const f1 = document.getElementById('flavor-'+k+'-1').value;
-      const f2el = document.getElementById('flavor-'+k+'-2');
-      const f2 = f2el ? f2el.value : '';
-      const ca = document.getElementById('casca-'+k) ? document.getElementById('casca-'+k).value : '';
-      if(f1) fl += f1;
-      if(f2) fl += ' / '+f2;
-      if(ca) fl += ' | Casca: '+ca;
-    }
-    msg += '▪️ ' + p.name + ' x' + qty;
-    if(fl) msg += '\n   ↳ ' + fl;
-    msg += ' — R$' + (p.price*qty).toFixed(2).replace('.',',') + '\n';
+  cart.forEach(item => {
+    let detail = item.flavor1;
+    if(item.flavor2) detail += ' / ' + item.flavor2;
+    detail += ' | Casca: ' + item.casca;
+    msg += '▪️ ' + item.name + ' ×' + item.qty + '\n';
+    msg += '   ↳ ' + detail + ' — ' + fmtMoney(item.price * item.qty) + '\n';
   });
 
   msg += '━━━━━━━━━━━━━━━━━━━━\n';
-  msg += '💰 *Total:* R$' + total.toFixed(2).replace('.',',') + '\n';
-  msg += '💳 *Pix (50%):* R$' + (total*0.5).toFixed(2).replace('.',',') + '\n';
+  msg += '💰 *Total:* ' + fmtMoney(total) + '\n';
+  msg += '💳 *Pix (50%):* ' + fmtMoney(total * 0.5) + '\n';
   msg += '━━━━━━━━━━━━━━━━━━━━\n';
   msg += '📎 *Segue em anexo o comprovante do Pix.*';
 
@@ -1346,26 +1431,32 @@ function finalizarPedido(){
   window.open(url, '_blank');
 
   document.getElementById('success-nome').textContent = nome;
+  document.getElementById('cartBar').style.display = 'none';
   goStep(5);
-  document.getElementById('cartBar').style.display='none';
 }
 
+// ─────────────────────────────────────────────
+// NOVO PEDIDO — reseta tudo
+// ─────────────────────────────────────────────
 function novoP(){
-  Object.keys(selected).forEach(k=>delete selected[k]);
-  selectedDay=null;
-  selectedTime=null;
-  document.querySelectorAll('.product-card').forEach(c=>c.classList.remove('selected'));
-  document.querySelectorAll('[id^="extras-"]').forEach(e=>e.style.display='none');
-  document.querySelectorAll('.qty-num').forEach(q=>q.textContent='1');
-  document.querySelectorAll('.flavor-select, .casca-select').forEach(s=>s.selectedIndex=0);
-  document.getElementById('f-nome').value='';
-  document.getElementById('f-tel').value='';
-  document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('selected'));
-  [1,2,3,4,5].forEach(i=>document.getElementById('day-'+i).classList.remove('selected'));
+  cart = [];
+  uidCounter = 0;
+  selectedDay  = null;
+  selectedTime = null;
+  Object.keys(tempQty).forEach(k => tempQty[k] = 1);
+
+  document.querySelectorAll('.product-card').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('[id^="extras-"]').forEach(e => e.classList.remove('visible'));
+  document.querySelectorAll('.qty-num').forEach(q => q.textContent = '1');
+  document.querySelectorAll('.flavor-select').forEach(s => { s.selectedIndex = 0; s.style.borderColor = ''; });
+  document.getElementById('f-nome').value = '';
+  document.getElementById('f-tel').value  = '';
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+  [1,2,3,4,5].forEach(i => document.getElementById('day-' + i).classList.remove('selected'));
+
   updateCart();
   goStep(1);
 }
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"7f7b0fd8732c4326aae4b9d58d5c514a","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
