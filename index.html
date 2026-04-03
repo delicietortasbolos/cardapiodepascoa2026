@@ -198,6 +198,24 @@
     position: relative;
     overflow: hidden;
   }
+  .product-card.sold-out {
+  opacity: 0.5;
+  pointer-events: none;
+  position: relative;
+}
+
+.product-card.sold-out::after {
+  content: 'ESGOTADO';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #c0392b;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
   .product-card-header {
     display: flex;
     align-items: center;
@@ -761,7 +779,7 @@
       </div>
 
       <!-- t4 -->
-      <div class="product-card" id="card-t4">
+      <div class="product-card sold-out" id="card-t4">
         <div class="product-card-header" onclick="toggleCard('t4')">
           <div class="card-check" id="check-t4"></div>
           <div class="card-body">
@@ -884,7 +902,7 @@
       </div>
 
       <!-- p4 -->
-      <div class="product-card" id="card-p4">
+      <div class="product-card sold-out" id="card-p4">
         <div class="product-card-header" onclick="toggleCard('p4')">
           <div class="card-check" id="check-p4"></div>
           <div class="card-body">
@@ -955,12 +973,7 @@
     <div class="form-group">
       <label class="form-label">Dia de Retirada *</label>
       <div class="day-grid">
-        <div class="day-btn" id="day-1" onclick="selectDay(1)"><span class="day-num">01</span><span class="day-month">Abril</span></div>
-        <div class="day-btn" id="day-2" onclick="selectDay(2)"><span class="day-num">02</span><span class="day-month">Abril</span></div>
-        <div class="day-btn" id="day-3" onclick="selectDay(3)"><span class="day-num">03</span><span class="day-month">Abril</span></div>
-        <div class="day-btn" id="day-4" onclick="selectDay(4)"><span class="day-num">04</span><span class="day-month">Abril</span></div>
-        <div class="day-btn" id="day-5" onclick="selectDay(5)"><span class="day-num">05</span><span class="day-month">Abril</span></div>
-      </div>
+        <div class="day-grid" id="day-grid"></div>
       <div class="error-msg" id="err-dia"></div>
     </div>
 
@@ -1114,6 +1127,33 @@ let currentStep  = 1;
 
 const WHATSAPP_NUMBER = '5524998473901';
 
+function gerarDiasDisponiveis() {
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = '';
+
+  const datas = [
+    new Date(2026, 3, 3),
+    new Date(2026, 3, 4),
+    new Date(2026, 3, 5)
+  ];
+
+  datas.forEach(data => {
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = data.toLocaleDateString('pt-BR', { month: 'long' });
+
+    const btn = document.createElement('div');
+    btn.className = 'day-btn';
+
+    btn.innerHTML = `
+      <span class="day-num">${dia}</span>
+      <span class="day-month">${mes}</span>
+    `;
+
+    btn.onclick = () => selectDay(data);
+
+    grid.appendChild(btn);
+  });
+}
 // ─────────────────────────────────────────────
 // UTILS
 // ─────────────────────────────────────────────
@@ -1146,6 +1186,10 @@ function changeQty(id, delta){
 // ADICIONAR AO CARRINHO
 // ─────────────────────────────────────────────
 function addToCart(id){
+  if (id === 't4' || id === 'p4') {
+    alert('Este produto está esgotado 😢');
+    return;
+  }
   const prod   = catalog[id];
   const f1El   = document.getElementById('flavor-' + id + '-1');
   const f2El   = document.getElementById('flavor-' + id + '-2');
@@ -1457,6 +1501,7 @@ function novoP(){
   updateCart();
   goStep(1);
 }
+gerarDiasDisponiveis();
 </script>
 </body>
 </html>
