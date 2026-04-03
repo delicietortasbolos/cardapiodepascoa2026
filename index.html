@@ -972,8 +972,7 @@
 
     <div class="form-group">
       <label class="form-label">Dia de Retirada *</label>
-      <div class="day-grid">
-        <div class="day-grid" id="day-grid"></div>
+      <div class="day-grid" id="day-grid"></div>
       <div class="error-msg" id="err-dia"></div>
     </div>
 
@@ -1296,11 +1295,14 @@ function updateCart(){
 // ─────────────────────────────────────────────
 // DIA E HORÁRIO
 // ─────────────────────────────────────────────
-function selectDay(d){
-  selectedDay = d;
-  [1,2,3,4,5].forEach(i => {
-    document.getElementById('day-' + i).classList.toggle('selected', i === d);
+function selectDay(data){
+  selectedDay = data;
+
+  document.querySelectorAll('.day-btn').forEach(btn => {
+    btn.classList.remove('selected');
   });
+
+  event.currentTarget.classList.add('selected');
 }
 
 function selectTime(t){
